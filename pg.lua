@@ -5,18 +5,17 @@ local currentGun = "none"
 -- Gán từng nút chuột cho từng khẩu
 local mouseButtonToGun = {
     [4] = "M416",
-    [5] = "AKM",
-    [6] = "BERYL",
+    [5] = "BERYL",
+    [6] = "AKM",
     [7] = "UMP45"
-    -- [8] = "UMP45",
 }
 
 -- Thông số macro cho từng khẩu súng
 local gunProfiles = {
-    M416 = {pullAmount = 12, pullDelay = 10, pullCount = 30},
-    AKM  = {pullAmount = 18, pullDelay = 14, pullCount = 30},
-    BERYL = {pullAmount = 20, pullDelay = 9, pullCount = 30},
-    UMP45 = {pullAmount = 10, pullDelay = 11, pullCount = 25}
+    AKM   = { pullAmount = 18, pullDelay = 14, pullCount = 30 },
+    M416  = { pullAmount = 12, pullDelay = 10, pullCount = 30 },
+    BERYL = { pullAmount = 20, pullDelay = 9, pullCount = 30 },
+    UMP45 = { pullAmount = 10, pullDelay = 11, pullCount = 25 }
 }
 
 -- Hàm chính xử lý sự kiện macro
@@ -24,7 +23,7 @@ function OnEvent(event, arg)
     -- Chỉ xử lý khi macro được kích hoạt
     if event == "PROFILE_ACTIVATED" then
         ClearLog()
-        OutputLogMessage("macro system loaded ✅\n")
+        -- OutputLogMessage("macro system loaded ✅\n")
         EnablePrimaryMouseButtonEvents(true)
         SetScrollLockState(false)
     end
@@ -34,10 +33,10 @@ function OnEvent(event, arg)
         if not macroEnabled then
             currentGun = mouseButtonToGun[arg]
             macroEnabled = true
-            OutputLogMessage("Macro BẬT ✅ - Chọn súng: " .. currentGun .. " 🔫\n")
+            -- OutputLogMessage("Macro BẬT ✅ - Chọn súng: " .. currentGun .. " 🔫\n")
             SetScrollLockState(true)
         else
-            OutputLogMessage("Macro TẮT ❌\n")
+            -- OutputLogMessage("Macro TẮT ❌\n")
             macroEnabled = false
             currentGun = "none"
             SetScrollLockState(false)
