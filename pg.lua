@@ -2,20 +2,24 @@
 local macroEnabled = false
 local currentGun = "none"
 
--- Gán từng nút chuột cho từng khẩu
 local mouseButtonToGun = {
     [4] = "M416",
     [5] = "BERYL",
     [6] = "AKM",
-    [7] = "UMP45"
+    [7] = "AUG",
+    [8] = "ACE32"
 }
 
 -- Thông số macro cho từng khẩu súng
+-- pullAmount : số lượng pixel bị kéo xuống
+-- pullDelay  : time deplay giữa mỗi lẫn kéo, đièu chỉnh tốc dộ kéo
+-- pullCount  : số lần lặp lại thao tác kéo (số viên bắn ra)
 local gunProfiles = {
-    AKM   = { pullAmount = 18, pullDelay = 14, pullCount = 30 },
-    M416  = { pullAmount = 12, pullDelay = 10, pullCount = 30 },
-    BERYL = { pullAmount = 20, pullDelay = 9, pullCount = 30 },
-    UMP45 = { pullAmount = 10, pullDelay = 11, pullCount = 25 }
+    M416 = { pullAmount = 29, pullDelay = 68, pullCount = 60 },
+    AUG = { pullAmount = 35, pullDelay = 73, pullCount = 60 },
+    AKM = { pullAmount = 38, pullDelay = 70, pullCount = 60 },
+    BERYL = { pullAmount = 43, pullDelay = 76, pullCount = 60 },
+    ACE32 = { pullAmount = 34, pullDelay = 80, pullCount = 60 }
 }
 
 -- Hàm chính xử lý sự kiện macro
