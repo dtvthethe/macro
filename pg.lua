@@ -24,7 +24,7 @@ function OnEvent(event, arg)
     -- Chỉ xử lý khi macro được kích hoạt
     if event == "PROFILE_ACTIVATED" then
         ClearLog()
-        OutputLogMessage("PUBG macro system loaded ✅\n")
+        OutputLogMessage("macro system loaded ✅\n")
         EnablePrimaryMouseButtonEvents(true)
         SetScrollLockState(false)
     end
