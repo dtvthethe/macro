@@ -25,6 +25,8 @@ local click = 1  -- 1 = chỉ LMB, 3 = RMB + LMB
 -- compensateY: recoil dọc
 -- fireRate: delay giữa các viên (ms) = 60000 / RPM
 -- magazineSize: số đạn trong băng
+-- horizontalPattern: function để điều chỉnh recoil ngang theo số viên
+-- verticalPattern: function để điều chỉnh recoil dọc theo số viên
 
 local weaponProfiles = {
     -- SMGs
@@ -49,64 +51,130 @@ local weaponProfiles = {
     
     -- Assault Rifles
     M416 = {
-        compensateX = 1,       -- Very stable horizontal
-        compensateY = 28,      -- Moderate vertical recoil
-        fireRate = 75,         -- 800 RPM
-        magazineSize = 45
+        compensateX = 0,
+        compensateY = 35,
+        fireRate = 75,
+        magazineSize = 40,
+        -- M416 có recoil tăng dần từ viên 20 trở đi
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 10 then
+                return 32  -- 10 viên đầu dễ kiểm soát
+            elseif bulletNum <= 20 then
+                return 35  -- viên 11-20 recoil chuẩn
+            elseif bulletNum <= 30 then
+                return 38  -- viên 21-30 recoil tăng
+            else
+                return 42  -- viên cuối recoil cao
+            end
+        end
     },
     AUG = {
-        compensateX = -1,      -- Slight left tendency
-        compensateY = 34,      -- Similar to M416
-        fireRate = 78,         -- 770 RPM
-        magazineSize = 40
+        compensateX = -1,
+        compensateY = 34,
+        fireRate = 78,
+        magazineSize = 40,
+        -- AUG tương tự M416 nhưng ổn định hơn
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 15 then
+                return 32
+            elseif bulletNum <= 30 then
+                return 34
+            else
+                return 37
+            end
+        end
     },
     SCAR_L = {
-        compensateX = 1,       -- Slight right pull
-        compensateY = 38,      -- Higher vertical recoil
-        fireRate = 96,         -- 625 RPM
-        magazineSize = 30
+        compensateX = 1,
+        compensateY = 38,
+        fireRate = 96,
+        magazineSize = 30,
+        -- SCAR-L recoil tăng mạnh sau 20 viên
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 10 then
+                return 35
+            elseif bulletNum <= 20 then
+                return 38
+            else
+                return 45
+            end
+        end
     },
     BERRYL = {
-        compensateX = -2,      -- Strong left pull initially
-        compensateY = 32,      -- High vertical recoil
-        fireRate = 76,         -- 790 RPM
-        magazineSize = 60,
-        -- BERYL có pattern đặc biệt: giật trái mạnh đầu băng
+        compensateX = -2,
+        compensateY = 48,
+        fireRate = 76,
+        magazineSize = 40,
+        -- BERYL có pattern phức tạp: recoil cao đầu băng, giảm giữa, tăng lại cuối
         horizontalPattern = function(bulletNum)
             if bulletNum <= 5 then
-                return -3      -- 5 viên đầu giật mạnh trái
+                return -3
             elseif bulletNum <= 15 then
-                return -4      -- viên 6-15 giật nhẹ trái
+                return -1
             elseif bulletNum <= 30 then
-                return 2       -- viên 16-30 giật nhẹ phải
+                return 1
             else
-                return 0       -- viên cuối ổn định
+                return 0
+            end
+        end,
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 5 then
+                return 52  -- 5 viên đầu recoil rất cao
+            elseif bulletNum <= 15 then
+                return 45  -- viên 6-15 giảm xuống
+            elseif bulletNum <= 30 then
+                return 48  -- viên 16-30 tăng trở lại
+            else
+                return 55  -- viên cuối rất cao
             end
         end
     },
     ACE32 = {
-        compensateX = 1,       -- Slight right pull
-        compensateY = 42,      -- High vertical recoil (7.62mm)
-        fireRate = 100,        -- 600 RPM
-        magazineSize = 40
+        compensateX = 1,
+        compensateY = 42,
+        fireRate = 100,
+        magazineSize = 40,
+        -- ACE32 recoil ổn định hơn các 7.62mm khác
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 15 then
+                return 40
+            elseif bulletNum <= 30 then
+                return 42
+            else
+                return 46
+            end
+        end
     },
     AKM = {
-        compensateX = 0,       -- Use pattern
-        compensateY = 50,      -- Very high vertical recoil (7.62mm)
-        fireRate = 100,        -- 600 RPM
+        compensateX = 0,
+        compensateY = 50,
+        fireRate = 100,
         magazineSize = 40,
-        -- AKM có recoil pattern phức tạp nhất
+        -- AKM có pattern phức tạp nhất: cả ngang và dọc đều thay đổi
         horizontalPattern = function(bulletNum)
             if bulletNum <= 3 then
-                return -4      -- 3 viên đầu giật rất mạnh trái
+                return -4
             elseif bulletNum <= 10 then
-                return -2      -- viên 4-10 giật trái vừa
+                return -2
             elseif bulletNum <= 20 then
-                return 2       -- viên 11-20 giật phải
+                return 2
             elseif bulletNum <= 30 then
-                return 1       -- viên 21-30 giật nhẹ phải
+                return 1
             else
-                return 0       -- viên cuối
+                return 0
+            end
+        end,
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 3 then
+                return 55  -- 3 viên đầu recoil cực cao
+            elseif bulletNum <= 10 then
+                return 48  -- viên 4-10 giảm xuống
+            elseif bulletNum <= 20 then
+                return 50  -- viên 11-20 ổn định
+            elseif bulletNum <= 30 then
+                return 52  -- viên 21-30 tăng nhẹ
+            else
+                return 58  -- viên cuối rất cao
             end
         end
     }
@@ -151,13 +219,19 @@ function ApplyRecoilControl(profile)
             compensateX = profile.horizontalPattern(i)
         end
         
+        -- Xác định recoil dọc cho viên đạn này
+        local compensateY = profile.compensateY
+        if profile.verticalPattern then
+            compensateY = profile.verticalPattern(i)
+        end
+        
         -- Tính toán di chuyển X với fractional tracking
         local moveX = compensateX * SensSetting + remainder_x
         local moveX_int = math.floor(moveX + 0.5)
         remainder_x = moveX - moveX_int
         
         -- Tính toán di chuyển Y với fractional tracking
-        local moveY = profile.compensateY * SensSetting + remainder_y
+        local moveY = compensateY * SensSetting + remainder_y
         local moveY_int = math.floor(moveY + 0.5)
         remainder_y = moveY - moveY_int
         
