@@ -6,10 +6,10 @@ local BIZON = 6
 local M416 = 7
 local BERRYL = 8
 
--- local AUG = 8
--- local SCAR_L = 9
--- local ACE32 = 11
--- local AKM = 12
+local AUG = 9
+local SCAR_L = 10
+local ACE32 = 11
+local AKM = 12
 
 local MACRO_OFF = 3  -- Nút tắt macro
 
