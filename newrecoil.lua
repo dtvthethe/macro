@@ -30,29 +30,29 @@ local weaponProfiles = {
     -- SMGs
     MP5K = {
         compensateX = 0,
-        compensateY = 25,      -- Low vertical recoil
+        compensateY = 18,      -- Low vertical recoil
         fireRate = 67,         -- 900 RPM
-        magazineSize = 30
+        magazineSize = 42
     },
     UMP45 = {
         compensateX = -1,      -- Slight left pull
-        compensateY = 28,      -- Moderate vertical recoil
+        compensateY = 23,      -- Moderate vertical recoil
         fireRate = 92,         -- 650 RPM
-        magazineSize = 40
+        magazineSize = 45
     },
     BIZON = {
         compensateX = 1,       -- Slight right pull
-        compensateY = 26,      -- Low-moderate vertical recoil
+        compensateY = 18,      -- Low-moderate vertical recoil
         fireRate = 71,         -- 840 RPM
-        magazineSize = 53
+        magazineSize = 60
     },
     
     -- Assault Rifles
     M416 = {
-        compensateX = 0,       -- Very stable horizontal
-        compensateY = 35,      -- Moderate vertical recoil
+        compensateX = 1,       -- Very stable horizontal
+        compensateY = 28,      -- Moderate vertical recoil
         fireRate = 75,         -- 800 RPM
-        magazineSize = 40
+        magazineSize = 45
     },
     AUG = {
         compensateX = -1,      -- Slight left tendency
@@ -68,17 +68,17 @@ local weaponProfiles = {
     },
     BERRYL = {
         compensateX = -2,      -- Strong left pull initially
-        compensateY = 48,      -- High vertical recoil
+        compensateY = 32,      -- High vertical recoil
         fireRate = 76,         -- 790 RPM
-        magazineSize = 40,
+        magazineSize = 60,
         -- BERYL có pattern đặc biệt: giật trái mạnh đầu băng
         horizontalPattern = function(bulletNum)
             if bulletNum <= 5 then
                 return -3      -- 5 viên đầu giật mạnh trái
             elseif bulletNum <= 15 then
-                return -1      -- viên 6-15 giật nhẹ trái
+                return -4      -- viên 6-15 giật nhẹ trái
             elseif bulletNum <= 30 then
-                return 1       -- viên 16-30 giật nhẹ phải
+                return 2       -- viên 16-30 giật nhẹ phải
             else
                 return 0       -- viên cuối ổn định
             end
