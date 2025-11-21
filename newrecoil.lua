@@ -1,14 +1,15 @@
---====== Mouse key binds =========--
--- Gán các nút chuột cho từng loại súng
 local MP5K = 4
 local UMP45 = 5
+
 local BIZON = 6
+
 local M416 = 7
-local AUG = 8
-local SCAR_L = 9
-local BERRYL = 10
-local ACE32 = 11
-local AKM = 12
+local BERRYL = 8
+
+-- local AUG = 8
+-- local SCAR_L = 9
+-- local ACE32 = 11
+-- local AKM = 12
 
 local MACRO_OFF = 3  -- Nút tắt macro
 
