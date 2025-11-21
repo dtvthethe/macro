@@ -1,17 +1,12 @@
 local MP5K = 4
 local UMP45 = 5
-
 local BIZON = 6
-
 local M416 = 7
 local BERRYL = 8
-
 local AUG = 9
 local SCAR_L = 10
 local ACE32 = 11
 local AKM = 12
-
-local MACRO_OFF = 3  -- Nút tắt macro
 
 --====== Sensitivity Settings =========--
 local SensSetting = 1  -- Điều chỉnh theo Vertical Sensitivity Multiplier của bạn
@@ -184,22 +179,23 @@ local weaponMap = {
     [SCAR_L] = "SCAR_L",
     [BERRYL] = "BERRYL",
     [ACE32] = "ACE32",
-    [AKM] = "AKM",
-    [MACRO_OFF] = "OFF"
+    [AKM] = "AKM"
 }
 
 --====== Main Event Handler =========--
 function OnEvent(event, arg)
-    -- Xử lý chọn súng
+    -- Xử lý chọn súng hoặc tắt macro
     if event == "MOUSE_BUTTON_PRESSED" and weaponMap[arg] then
-        weapon = arg
-        weaponName = weaponMap[arg]
-        
-        if arg == MACRO_OFF then
+        -- Nếu macro đang bật, bấm bất kỳ nút nào cũng tắt
+        if recoil then
             recoil = false
+            weaponName = "NONE"
             SetScrollLockState(false)
             OutputLogMessage("MACRO OFF\n")
         else
+            -- Nếu macro đang tắt, bấm nút để bật và chọn súng
+            weapon = arg
+            weaponName = weaponMap[arg]
             recoil = true
             SetScrollLockState(true)
             OutputLogMessage("MACRO ON - " .. weaponName .. "\n")
