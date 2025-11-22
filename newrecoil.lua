@@ -1,5 +1,5 @@
-local MP5K = 4
-local UMP45 = 5
+local MP5KMINI = 4 -- MP5 nini
+local MP5KMED = 5 -- MP5K med
 local BIZON = 6
 local M416 = 7
 local BERRYL = 8
@@ -7,6 +7,7 @@ local AUG = 9
 local SCAR_L = 10
 local ACE32 = 11
 local AKM = 12
+local UMP45 = 15
 
 --====== Sensitivity Settings =========--
 local SensSetting = 1  -- Điều chỉnh theo Vertical Sensitivity Multiplier của bạn
@@ -30,11 +31,52 @@ local click = 1  -- 1 = chỉ LMB, 3 = RMB + LMB
 
 local weaponProfiles = {
     -- SMGs
-    MP5K = {
+    MP5KMED = {
         compensateX = 0,
         compensateY = 18,      -- Low vertical recoil
         fireRate = 67,         -- 900 RPM
-        magazineSize = 42
+        magazineSize = 42,
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 3 then
+                return 18  -- 3 viên đầu recoil cực cao
+            elseif bulletNum <= 10 then
+                return 18  -- viên 4-10 giảm xuống
+            elseif bulletNum <= 20 then
+                return 18  -- viên 11-20 ổn định
+            elseif bulletNum <= 30 then
+                return 18  -- viên 21-30 tăng nhẹ
+            else
+                return 18  -- viên cuối rất cao
+            end
+        end
+    },
+    MP5KMINI = {
+        compensateX = 0,
+        compensateY = 18,      -- Low vertical recoil
+        fireRate = 67,         -- 900 RPM
+        magazineSize = 42,
+        horizontalPattern = function(bulletNum)
+            if bulletNum <= 20 then
+                return -1
+            elseif bulletNum <= 30 then
+                return 1
+            else
+                return 1
+            end
+        end,
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 3 then
+                return 18  -- 3 viên đầu recoil cực cao
+            elseif bulletNum <= 10 then
+                return 19  -- viên 4-10 giảm xuống
+            elseif bulletNum <= 20 then
+                return 24  -- viên 11-20 ổn định
+            elseif bulletNum <= 30 then
+                return 21  -- viên 21-30 tăng nhẹ
+            else
+                return 22  -- viên cuối rất cao
+            end
+        end
     },
     UMP45 = {
         compensateX = -1,      -- Slight left pull
@@ -46,7 +88,33 @@ local weaponProfiles = {
         compensateX = 1,       -- Slight right pull
         compensateY = 18,      -- Low-moderate vertical recoil
         fireRate = 71,         -- 840 RPM
-        magazineSize = 60
+        magazineSize = 60,
+        horizontalPattern = function(bulletNum)
+            if bulletNum <= 20 then
+                return 0
+            elseif bulletNum <= 30 then
+                return 1
+            elseif bulletNum <= 40 then
+                return 1
+            else
+                return 2
+            end
+        end,
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 3 then
+                return 18  -- 3 viên đầu recoil cực cao
+            elseif bulletNum <= 10 then
+                return 19  -- viên 4-10 giảm xuống
+            elseif bulletNum <= 20 then
+                return 23  -- viên 11-20 ổn định
+            elseif bulletNum <= 30 then
+                return 22  -- viên 21-30 tăng nhẹ
+            elseif bulletNum <= 40 then
+                return 16  -- viên 21-30 tăng nhẹ
+            else
+                return 20  -- viên cuối rất cao
+            end
+        end
     },
     
     -- Assault Rifles
@@ -54,17 +122,30 @@ local weaponProfiles = {
         compensateX = 0,
         compensateY = 35,
         fireRate = 75,
-        magazineSize = 40,
+        magazineSize = 45,
+        horizontalPattern = function(bulletNum)
+            if bulletNum <= 10 then
+                return 1
+            elseif bulletNum <= 20 then
+                return 0
+            elseif bulletNum <= 30 then
+                return 1
+            else
+                return -1
+            end
+        end,
         -- M416 có recoil tăng dần từ viên 20 trở đi
         verticalPattern = function(bulletNum)
             if bulletNum <= 10 then
-                return 32  -- 10 viên đầu dễ kiểm soát
+                return 26  -- 10 viên đầu dễ kiểm soát
             elseif bulletNum <= 20 then
-                return 35  -- viên 11-20 recoil chuẩn
+                return 31  -- viên 11-20 recoil chuẩn
             elseif bulletNum <= 30 then
-                return 38  -- viên 21-30 recoil tăng
+                return 27  -- viên 21-30 recoil tăng
+            elseif bulletNum <= 40 then
+                return 37  -- viên 21-30 recoil tăng
             else
-                return 42  -- viên cuối recoil cao
+                return 36  -- viên cuối recoil cao
             end
         end
     },
@@ -104,28 +185,28 @@ local weaponProfiles = {
         compensateX = -2,
         compensateY = 48,
         fireRate = 76,
-        magazineSize = 40,
+        magazineSize = 45,
         -- BERYL có pattern phức tạp: recoil cao đầu băng, giảm giữa, tăng lại cuối
         horizontalPattern = function(bulletNum)
-            if bulletNum <= 5 then
-                return -3
-            elseif bulletNum <= 15 then
-                return -1
+            if bulletNum <= 10 then
+                return 0
+            elseif bulletNum <= 20 then
+                return 0
             elseif bulletNum <= 30 then
-                return 1
+                return 0
             else
                 return 0
             end
         end,
         verticalPattern = function(bulletNum)
-            if bulletNum <= 5 then
-                return 52  -- 5 viên đầu recoil rất cao
-            elseif bulletNum <= 15 then
+            if bulletNum <= 10 then
+                return 30  -- 5 viên đầu recoil rất cao
+            elseif bulletNum <= 20 then
                 return 45  -- viên 6-15 giảm xuống
             elseif bulletNum <= 30 then
-                return 48  -- viên 16-30 tăng trở lại
+                return 49  -- viên 16-30 tăng trở lại
             else
-                return 55  -- viên cuối rất cao
+                return 53  -- viên cuối rất cao
             end
         end
     },
@@ -245,7 +326,8 @@ end
 
 --====== Weapon Selection Handler =========--
 local weaponMap = {
-    [MP5K] = "MP5K",
+    [MP5KMED] = "MP5KMED",
+    [MP5KMINI] = "MP5KMINI",
     [UMP45] = "UMP45",
     [BIZON] = "BIZON",
     [M416] = "M416",
