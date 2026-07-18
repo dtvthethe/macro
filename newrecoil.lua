@@ -1,13 +1,16 @@
 local MP5KMINI = 4 -- MP5 nini
 local MP5KMED = 5 -- MP5K med
-local BIZON = 6
+
+local ACE32 = 6
+
 local M416 = 7
 local BERRYL = 8
-local AUG = 9
+
+local AUG = 17
 local SCAR_L = 10
-local ACE32 = 11
 local AKM = 12
 local UMP45 = 15
+local BIZON = 16
 
 --====== Sensitivity Settings =========--
 local SensSetting = 1  -- Điều chỉnh theo Vertical Sensitivity Multiplier của bạn
@@ -38,15 +41,15 @@ local weaponProfiles = {
         magazineSize = 42,
         verticalPattern = function(bulletNum)
             if bulletNum <= 3 then
-                return 18  -- 3 viên đầu recoil cực cao
+                return 7  -- 3 viên đầu recoil cực cao
             elseif bulletNum <= 10 then
-                return 18  -- viên 4-10 giảm xuống
+                return 10  -- viên 4-10 giảm xuống
             elseif bulletNum <= 20 then
-                return 18  -- viên 11-20 ổn định
+                return 16  -- viên 11-20 ổn định
             elseif bulletNum <= 30 then
-                return 18  -- viên 21-30 tăng nhẹ
+                return 12  -- viên 21-30 tăng nhẹ
             else
-                return 18  -- viên cuối rất cao
+                return 12 -- viên cuối rất cao
             end
         end
     },
@@ -57,24 +60,24 @@ local weaponProfiles = {
         magazineSize = 42,
         horizontalPattern = function(bulletNum)
             if bulletNum <= 20 then
-                return -1
+                return 0
             elseif bulletNum <= 30 then
-                return 1
+                return 0
             else
-                return 1
+                return 0
             end
         end,
         verticalPattern = function(bulletNum)
             if bulletNum <= 3 then
-                return 18  -- 3 viên đầu recoil cực cao
+                return 8  -- 3 viên đầu recoil cực cao
             elseif bulletNum <= 10 then
-                return 19  -- viên 4-10 giảm xuống
+                return 11  -- viên 4-10 giảm xuống
             elseif bulletNum <= 20 then
-                return 24  -- viên 11-20 ổn định
+                return 20  -- viên 11-20 ổn định
             elseif bulletNum <= 30 then
-                return 21  -- viên 21-30 tăng nhẹ
+                return 17  -- viên 21-30 tăng nhẹ
             else
-                return 22  -- viên cuối rất cao
+                return 19  -- viên cuối rất cao
             end
         end
     },
@@ -125,27 +128,31 @@ local weaponProfiles = {
         magazineSize = 45,
         horizontalPattern = function(bulletNum)
             if bulletNum <= 10 then
-                return 1
+                return 0
             elseif bulletNum <= 20 then
                 return 0
             elseif bulletNum <= 30 then
                 return 1
             else
-                return -1
+                return 1
             end
         end,
         -- M416 có recoil tăng dần từ viên 20 trở đi
         verticalPattern = function(bulletNum)
-            if bulletNum <= 10 then
-                return 26  -- 10 viên đầu dễ kiểm soát
+            if bulletNum <= 7 then
+                return 16  -- 7 viên đầu dễ kiểm soát
+            elseif bulletNum <= 10 then
+                return 20  -- 10 viên đầu dễ kiểm soát
             elseif bulletNum <= 20 then
-                return 31  -- viên 11-20 recoil chuẩn
+                return 22  -- viên 11-20 recoil chuẩn
+            elseif bulletNum <= 26 then
+                return 21  -- viên 21-30 recoil tăng
             elseif bulletNum <= 30 then
-                return 27  -- viên 21-30 recoil tăng
+                return 20
             elseif bulletNum <= 40 then
-                return 37  -- viên 21-30 recoil tăng
+                return 23  -- viên 21-30 recoil tăng
             else
-                return 36  -- viên cuối recoil cao
+                return 23  -- viên cuối recoil cao
             end
         end
     },
@@ -182,11 +189,10 @@ local weaponProfiles = {
         end
     },
     BERRYL = {
-        compensateX = -2,
-        compensateY = 48,
-        fireRate = 76,
+        compensateX = 0,
+        compensateY = 35,
+        fireRate = 75,
         magazineSize = 45,
-        -- BERYL có pattern phức tạp: recoil cao đầu băng, giảm giữa, tăng lại cuối
         horizontalPattern = function(bulletNum)
             if bulletNum <= 10 then
                 return 0
@@ -198,31 +204,57 @@ local weaponProfiles = {
                 return 0
             end
         end,
+        -- M416 có recoil tăng dần từ viên 20 trở đi
         verticalPattern = function(bulletNum)
-            if bulletNum <= 10 then
-                return 30  -- 5 viên đầu recoil rất cao
+            if bulletNum <= 7 then
+                return 21  -- 7 viên đầu dễ kiểm soát
+            elseif bulletNum <= 10 then
+                return 22  -- 10 viên đầu dễ kiểm soát
             elseif bulletNum <= 20 then
-                return 45  -- viên 6-15 giảm xuống
+                return 28  -- viên 11-20 recoil chuẩn
+            elseif bulletNum <= 26 then
+                return 30  -- viên 21-30 recoil tăng
             elseif bulletNum <= 30 then
-                return 49  -- viên 16-30 tăng trở lại
+                return 33
+            elseif bulletNum <= 40 then
+                return 36  -- viên 21-30 recoil tăng
             else
-                return 53  -- viên cuối rất cao
+                return 36  -- viên cuối recoil cao
             end
         end
     },
     ACE32 = {
-        compensateX = 1,
-        compensateY = 42,
-        fireRate = 100,
-        magazineSize = 40,
-        -- ACE32 recoil ổn định hơn các 7.62mm khác
-        verticalPattern = function(bulletNum)
-            if bulletNum <= 15 then
-                return 40
+        compensateX = 0,
+        compensateY = 35,
+        fireRate = 75,
+        magazineSize = 45,
+        horizontalPattern = function(bulletNum)
+            if bulletNum <= 10 then
+                return 0
+            elseif bulletNum <= 20 then
+                return 0
             elseif bulletNum <= 30 then
-                return 42
+                return 1
             else
-                return 46
+                return 0
+            end
+        end,
+        -- M416 có recoil tăng dần từ viên 20 trở đi
+        verticalPattern = function(bulletNum)
+            if bulletNum <= 7 then
+                return 16  -- 7 viên đầu dễ kiểm soát
+            elseif bulletNum <= 10 then
+                return 20  -- 10 viên đầu dễ kiểm soát
+            elseif bulletNum <= 20 then
+                return 22  -- viên 11-20 recoil chuẩn
+            elseif bulletNum <= 26 then
+                return 21  -- viên 21-30 recoil tăng
+            elseif bulletNum <= 30 then
+                return 26
+            elseif bulletNum <= 40 then
+                return 26  -- viên 21-30 recoil tăng
+            else
+                return 26  -- viên cuối recoil cao
             end
         end
     },
