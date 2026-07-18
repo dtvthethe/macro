@@ -1,9 +1,9 @@
 local MP5KMINI = 4 -- MP5 nini
 local MP5KMED = 5 -- MP5K med
 
-local M416 = 6
+local ACE32 = 6
 
-local ACE32 = 7
+local M416 = 7
 local BERRYL = 8
 
 local AUG = 17
