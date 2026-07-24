@@ -3,8 +3,9 @@
 -- Refactored from pg_new.lua for compactness
 --
 --====== Mouse key binds =========--
-local AKM = 4
-local AUG = 5
+
+local MP5K = 4
+local UMP45 = 5
 local ACE32 = 6
 local M416 = 7
 local BERRYL = 8
@@ -14,10 +15,10 @@ local GROZA = nil
 local FAMAS = nil
 local BIZON = nil
 local TOMMY = nil
-local UMP45 = nil
-local MP5K = nil
 local P90 = nil
 local MACRO_OFF = nil
+local AKM = nil
+local AUG = nil
 
 --====== Keyboard key binds (Only Logitech G Keyboards) =========--
 local AKM_Keyboard = nil
@@ -65,6 +66,12 @@ local SensSetting = 1  --> !! Change it for your own "Vertical Sensitivity Multi
 -- For (LMB) only 1
 -- For (RMB)+(LMB) 3
 local click = 1  --> !! Change it for your own "Mouse Button Setting" (LMB) or (RMB)+(LMB).
+
+
+--====== CAPSLOCK INVERT SETTING =========--
+-- Mặc định: CapsLock BẬT = có phụ kiện (att/att_), TẮT = không/ít phụ kiện (""/"_")
+-- Đặt thành true để ĐẢO NGƯỢC: CapsLock BẬT = ""/"_", CapsLock TẮT = att/att_
+local invert_capslock = false
 
 
 ---========================================= kava =========================================---
@@ -3079,7 +3086,9 @@ function OnEvent(event, arg)
 		wname = identify_weapon(weapon)
 		if wname then
 			local fb = fn_base[wname]
-			local caps = IsKeyLockOn("capslock") and 4 or 0
+			local caps_on = IsKeyLockOn("capslock")
+		if invert_capslock then caps_on = not caps_on end
+		local caps = caps_on and 4 or 0
 			local ctrl = IsModifierPressed("lctrl") and 2 or 0
 			local shift = IsModifierPressed("lshift") and 1 or 0
 			local code = caps + ctrl + shift
